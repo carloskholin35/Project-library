@@ -1,0 +1,8 @@
+# Virtual environments (essential)
+.venv/
+
+# Cache files Python
+__pycache__/
+
+# Databases
+bookshelf.db
