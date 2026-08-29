@@ -9,24 +9,32 @@ def get_db():
 def get_all_books():
     cn = get_db()
     cur = cn.cursor()
-    res = cur.execute("SELECT * FROM Books ORDER BY book_id DESC")
+    res = cur.execute("""
+        SELECT b.book_id, b.book_name, a.author_name, b.genre 
+        FROM Books b
+        INNER JOIN Authors a ON b.author_id = a.author_id  
+        ORDER BY b.book_id DESC
+        """)
     return res.fetchall()
 
 def get_book_from_id(book_id):
     cn = get_db()
     cur = cn.cursor()
-
-    cur.execute("SELECT book_id, book_name, author, genre FROM Books WHERE book_id = ?", (book_id,))
+    cur.execute("""
+        SELECT b.book_id, b.book_name, a.author_name, b.genre, b.cover_url, b.publication_year 
+        FROM Books b
+        INNER JOIN Authors a ON b.author_id = a.author_id 
+        WHERE b.book_id = ?
+        """, (book_id,))
     book = cur.fetchone() # Returns a tuple (ordered group of elements) or None
-
     return book
 
-def insert_book(book_name, author, genre):
+def insert_book(book_name, author_name, genre):
     cn = get_db()
     cur = cn.cursor()
-
-    query = "INSERT OR IGNORE INTO Books (book_name, author, genre) VALUES(?, ?, ?)"
-    cur.execute(query, (book_name, author, genre))
+    author_id = get_or_create_author_id(author_name)
+    query = "INSERT OR IGNORE INTO Books (author_id, book_name, genre) VALUES(?, ?, ?)"
+    cur.execute(query, (author_id, book_name, genre))
     cn.commit()
 
 def remove_book(book_id):
@@ -35,8 +43,22 @@ def remove_book(book_id):
     cur.execute("DELETE FROM Books WHERE book_id = ?", (book_id,))
     cn.commit()
 
-def modify_book(book_id, book_name, author, genre):
+def modify_book(book_id, book_name, author_name, genre, cover_url, publication_year):
     cn = get_db()
     cur = cn.cursor()
-    cur.execute("UPDATE Books SET book_name = ?, author = ?, genre = ? WHERE book_id = ?", (book_name, author, genre, book_id))
-    cn.commit()    
+    author_id = get_or_create_author_id(author_name)
+    cur.execute("UPDATE Books SET author_id = ?, book_name = ?, genre = ?, cover_url = ?, publication_year = ? WHERE book_id = ?", (author_id, book_name, genre, cover_url, publication_year, book_id))
+    cn.commit()
+
+def get_or_create_author_id(author_name):
+    cn = get_db()
+    cur = cn.cursor()
+
+    cur.execute("SELECT author_id FROM Authors WHERE author_name = ?", (author_name,))
+    result = cur.fetchone()
+    if result:
+        author_id = result[0]
+    else:
+        cur.execute("INSERT OR IGNORE INTO Authors (author_name) VALUES(?)", (author_name,))
+        author_id = cur.lastrowid
+    return author_id         

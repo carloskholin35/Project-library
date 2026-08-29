@@ -21,10 +21,10 @@ def add_book():
     if request.method == 'POST':
         # Capture the data from the three input text using request.form
         book_name = request.form.get('book_name')
-        author = request.form.get('author')
+        author_name = request.form.get('author_name')
         genre = request.form.get('genre')
         # Save in the bookshelf.db
-        insert_book(book_name, author, genre)
+        insert_book(book_name, author_name, genre)
 
         return redirect(url_for('index'))
 
@@ -47,7 +47,9 @@ def delete_book(book_id):
 def update_book(book_id):
     if request.method == 'POST':
         book_name = request.form.get('book_name')
-        author = request.form.get('author')
+        author_name = request.form.get('author_name')
         genre = request.form.get('genre')
-        modify_book(book_id, book_name, author, genre)
+        cover_url = request.form.get('cover_url')
+        publication_year = int(request.form.get('publication_year'))
+        modify_book(book_id, book_name, author_name, genre, cover_url, publication_year)
     return redirect(url_for('index'))        

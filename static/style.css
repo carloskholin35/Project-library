@@ -1,0 +1,25 @@
+body {
+    background-color: #14181C;
+}
+
+#title-book {
+    color: #FFFEFF;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+#author-book {
+    color: gray;
+    font-size: 20px;    
+}
+
+.genre-book {
+    color: gray;
+    font-size: 15px; 
+}
+
+#cover {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}

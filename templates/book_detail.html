@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>{{ book[1]|e }}</title>
 </head>
 <body>
-    <h1>{{ book[1]|e }}</h1>
-    <span>{{ book[2]|e }}</span>
+    <div id="cover">
+        <h1 id="title-book">{{ book[1]|e }}</h1>
+        <span id="author-book">{{ book[2]|e }}</span>
+    </div>
     <ul>
-        <span>{{ book[3]|e }}</span>
+        <span class="genre-book">{{ book[3]|e }}</span>
     </ul>
     <br><br><br>
     <form action="{{ url_for('delete_book', book_id=book[0]) }}" method="POST">
@@ -21,10 +24,16 @@
         <input type="text" name="book_name" value="{{ book[1]|e }}" required>
         <br><br>
         <label>Author:</label>
-        <input type="text" name="author" value="{{ book[2]|e }}" required>
+        <input type="text" name="author_name" value="{{ book[2]|e }}" required>
         <br><br>
         <label>Genre:</label>
         <input type="text" name="genre" value="{{ book[3]|e }}" required>
+        <br><br>
+        <label>Cover (URL):</label>
+        <input type="text" name="cover_url" value="{{ book[4]|e }}" required>
+        <br><br>
+        <label>Publication year:</label>
+        <input type="text" name="publication_year" value="{{ book[5]|e }}" required>
         <br><br>
         <button type="submit">Send</button>
     </form>

@@ -2,14 +2,27 @@ import sqlite3
 
 cn = sqlite3.connect("bookshelf.db")
 cur = cn.cursor()
+cur.execute("UPDATE Books SET author_id = 3 WHERE book_id = 6")
+cn.commit()
+cur.close()
+cn.close()
+
+cur.execute("""
+    CREATE TABLE IF NOT EXISTS Authors (
+        author_id INTEGER PRIMARY KEY,
+        author_name TEXT NOT NULL,
+        UNIQUE(author_name)    
+    )
+""")
 
 cur.execute("""
     CREATE TABLE IF NOT EXISTS Books (
         book_id INTEGER PRIMARY KEY,
+        author_id INTEGER,
         book_name TEXT NOT NULL,
-        author TEXT NOT NULL,
         genre TEXT NOT NULL,
-        UNIQUE(book_name, author)
+        UNIQUE(book_name, author_id),
+        FOREIGN KEY (author_id) REFERENCES Authors(author_id)
     )
 """)
 
@@ -20,10 +33,15 @@ data = [
     ("Words of Radiance", "Brandon Sanderson", "Epic Fantasy"),
 ]
 
-cur.executemany("""
-    INSERT OR IGNORE INTO Books (book_name, author, genre) 
-    VALUES(?, ?, ?)
-""", data)
+for bookName, authorName, bookGenre in data:
+    cur.execute("SELECT author_id FROM Authors WHERE author_name = ?", (authorName,))
+    result = cur.fetchone()
+    if result:
+        author_id = result[0]
+    else:
+        cur.execute("INSERT OR IGNORE INTO Authors (author_name) VALUES(?)", (authorName,))
+        author_id = cur.lastrowid
+    cur.execute("INSERT OR IGNORE INTO Books (author_id, book_name, genre) VALUES(?, ?, ?)", (author_id, bookName, bookGenre,))    
 
 cn.commit()
 cur.close()
