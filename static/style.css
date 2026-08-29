@@ -1,5 +1,11 @@
 body {
-    background-color: #14181C;
+    background-color: gray;
+}
+
+#cover-url {
+    max-width: 145px;
+    height: auto;
+    position: sticky;
 }
 
 #title-book {
@@ -9,7 +15,6 @@ body {
 }
 
 #author-book {
-    color: gray;
     font-size: 20px;    
 }
 

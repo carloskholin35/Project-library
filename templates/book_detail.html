@@ -8,7 +8,9 @@
 </head>
 <body>
     <div id="cover">
+        <img id="cover-url" src="{{ book[4]|e }}">
         <h1 id="title-book">{{ book[1]|e }}</h1>
+        <span id="publication_year">{{ book[5]|e }}</span>
         <span id="author-book">{{ book[2]|e }}</span>
     </div>
     <ul>
