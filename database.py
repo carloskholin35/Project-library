@@ -10,18 +10,26 @@ def get_all_books():
     cn = get_db()
     cur = cn.cursor()
     res = cur.execute("""
-        SELECT b.book_id, b.book_name, a.author_name, b.genre 
+        SELECT b.book_id, b.book_name, a.author_name
         FROM Books b
-        INNER JOIN Authors a ON b.author_id = a.author_id  
+        INNER JOIN Authors a ON b.author_id = a.author_id 
         ORDER BY b.book_id DESC
-        """)
+    """)
+    return res.fetchall()
+
+def get_all_genres():
+    cn = get_db()
+    cur = cn.cursor()
+    res = cur.execute("""
+        SELECT * FROM Genres
+    """)
     return res.fetchall()
 
 def get_book_from_id(book_id):
     cn = get_db()
     cur = cn.cursor()
     cur.execute("""
-        SELECT b.book_id, b.book_name, a.author_name, b.genre, b.cover_url, b.publication_year 
+        SELECT b.book_id, b.book_name, a.author_name, b.cover_url, b.publication_year 
         FROM Books b
         INNER JOIN Authors a ON b.author_id = a.author_id 
         WHERE b.book_id = ?
@@ -43,11 +51,20 @@ def remove_book(book_id):
     cur.execute("DELETE FROM Books WHERE book_id = ?", (book_id,))
     cn.commit()
 
-def modify_book(book_id, book_name, author_name, genre, cover_url, publication_year):
+def modify_book(book_id, book_name, author_name, cover_url, publication_year):
     cn = get_db()
     cur = cn.cursor()
     author_id = get_or_create_author_id(author_name)
-    cur.execute("UPDATE Books SET author_id = ?, book_name = ?, genre = ?, cover_url = ?, publication_year = ? WHERE book_id = ?", (author_id, book_name, genre, cover_url, publication_year, book_id))
+    cur.execute("UPDATE Books SET author_id = ?, book_name = ?, cover_url = ?, publication_year = ? WHERE book_id = ?", (author_id, book_name, cover_url, publication_year, book_id))
+    cn.commit()
+
+def modify_book_genres(book_id, genre_ids):
+    cn = get_db()
+    cur = cn.cursor()
+    cur.execute("DELETE FROM Book_Genres WHERE book_id = ?", (book_id,))
+    data = [(book_id, genre) for genre in genre_ids]
+    query = "INSERT OR IGNORE INTO Book_Genres (book_id, genre_id) VALUES(?, ?)"
+    cur.executemany(query, data)
     cn.commit()
 
 def get_or_create_author_id(author_name):

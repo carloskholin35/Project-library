@@ -8,13 +8,13 @@
 </head>
 <body>
     <div id="cover">
-        <img id="cover-url" src="{{ book[4]|e }}">
+        <img id="cover-url" src="{{ book[3]|e }}">
         <h1 id="title-book">{{ book[1]|e }}</h1>
-        <span id="publication_year">{{ book[5]|e }}</span>
+        <span id="publication_year">{{ book[4]|e }}</span>
         <span id="author-book">{{ book[2]|e }}</span>
     </div>
     <ul>
-        <span class="genre-book">{{ book[3]|e }}</span>
+        <span class="genre-book"></span>
     </ul>
     <br><br><br>
     <form action="{{ url_for('delete_book', book_id=book[0]) }}" method="POST">
@@ -29,13 +29,16 @@
         <input type="text" name="author_name" value="{{ book[2]|e }}" required>
         <br><br>
         <label>Genre:</label>
-        <input type="text" name="genre" value="{{ book[3]|e }}" required>
+        {% for genre in genres %}
+        <input type="checkbox" id="genre-{{ genre[0] }}" name="genres[]" value="{{ genre[0] }}">
+        <label for="genre-{{ genre[0] }}">{{ genre[1]|e }}</label>
+        {% endfor %}  
         <br><br>
         <label>Cover (URL):</label>
-        <input type="text" name="cover_url" value="{{ book[4]|e }}" required>
+        <input type="text" name="cover_url" value="{{ book[3]|e }}" required>
         <br><br>
         <label>Publication year:</label>
-        <input type="text" name="publication_year" value="{{ book[5]|e }}" required>
+        <input type="text" name="publication_year" value="{{ book[4]|e }}" required>
         <br><br>
         <button type="submit">Send</button>
     </form>

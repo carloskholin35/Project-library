@@ -10,8 +10,14 @@ cn.close()
 cur.execute("""
     CREATE TABLE IF NOT EXISTS Authors (
         author_id INTEGER PRIMARY KEY,
-        author_name TEXT NOT NULL,
-        UNIQUE(author_name)    
+        author_name TEXT NOT NULL UNIQUE 
+    )
+""")
+
+cur.execute("""
+    CREATE TABLE IF NOT EXISTS Genres (
+        genre_id INTEGER PRIMARY KEY,
+        genre_name TEXT NOT NULL UNIQUE
     )
 """)
 
@@ -20,9 +26,20 @@ cur.execute("""
         book_id INTEGER PRIMARY KEY,
         author_id INTEGER,
         book_name TEXT NOT NULL,
-        genre TEXT NOT NULL,
+        cover_url TEXT,
+        publication_year INTEGER,
         UNIQUE(book_name, author_id),
         FOREIGN KEY (author_id) REFERENCES Authors(author_id)
+    )
+""")
+
+cur.execute("""
+    CREATE TABLE IF NOT EXISTS Book_Genres (
+        book_id INTEGER,
+        genre_id INTEGER,
+        PRIMARY KEY (book_id, genre_id),
+        FOREIGN KEY (book_id) REFERENCES Books(book_id),
+        FOREIGN KEY (genre_id) REFERENCES Genres(genre_id)
     )
 """)
 
