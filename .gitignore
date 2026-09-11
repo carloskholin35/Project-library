@@ -6,3 +6,6 @@ __pycache__/
 
 # Databases
 bookshelf.db
+
+diary.md
+roadmap.md
