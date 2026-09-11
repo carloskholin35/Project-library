@@ -49,13 +49,27 @@ def get_genres_by_book(book_id):
     book_genre = cur.fetchall() # Cause it can have more than one genre
     return book_genre
 
-def insert_book(book_name, author_name, genre):
+def insert_book(book_name, author_name, cover_url, publication_year):
+    """Inserts a book if it doesn't already exist (same name + author). Returns (book_id, created: bool)."""
     cn = get_db()
     cur = cn.cursor()
+
     author_id = get_or_create_author_id(author_name)
-    query = "INSERT OR IGNORE INTO Books (author_id, book_name, genre) VALUES(?, ?, ?)"
-    cur.execute(query, (author_id, book_name, genre))
-    cn.commit()
+    cur.execute("SELECT book_id FROM Books WHERE book_name = ? AND author_id = ?", (book_name, author_id))
+    result = cur.fetchone()
+
+    # Avoid duplicates based on (book_name, author_id), only insert if it doesn't already exist
+    if result:
+        book_id = result[0]
+        created = False
+    else:
+        query = "INSERT OR IGNORE INTO Books (author_id, book_name, cover_url, publication_year) VALUES(?, ?, ?, ?)"
+        cur.execute(query, (author_id, book_name, cover_url, publication_year))
+        book_id = cur.lastrowid
+        created = True
+        cn.commit()
+    return book_id, created
+    
 
 def remove_book(book_id):
     cn = get_db()

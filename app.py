@@ -33,16 +33,19 @@ def teardown_app(exception):
 def index():
     """Main web interface"""
     all_books = get_all_books()
-    return render_template("index.html", books=all_books)
+    genres = get_all_genres()
+    return render_template("index.html", books=all_books, genres=genres)
 
 @app.route("/add_book", methods=['POST'])
 def add_book():
-    # Capture the data from the three input text using request.form
     book_name = request.form.get('book_name')
     author_name = request.form.get('author_name')
-    genre = request.form.get('genre')
-    # Save in the bookshelf.db
-    insert_book(book_name, author_name, genre)
+    cover_url = request.form.get('cover_url')
+    publication_year = int(request.form.get('publication_year'))
+    genre_ids = [int(genre) for genre in request.form.getlist('genres[]')] #List comprehension
+
+    book_id, created = insert_book(book_name, author_name, cover_url, publication_year)
+    modify_book_genres(book_id, genre_ids)
 
     return redirect(url_for('index'))
 

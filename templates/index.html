@@ -24,8 +24,17 @@
         <label>Author:</label>
         <input type="text" name="author_name" placeholder="Brandon Sanderson" required>
         <br><br>
+        <label>Cover:</label>
+        <input type="text" name="cover_url" placeholder="portada.jpg" required>
+        <br><br>
+        <label>Publication year:</label>
+        <input type="text" name="publication_year" placeholder="2006" required>
+        <br><br>
         <label>Genre:</label>
-        <input type="text" name="genre" placeholder="Fantasy" required>
+        {% for genre in genres %}
+        <input type="checkbox" id="genre-{{ genre[0] }}" name="genres[]" value="{{ genre[0] }}">
+        <label for="genre-{{ genre[0] }}">{{ genre[1]|e }}</label>
+        {% endfor %}  
         <br><br>
         <button type="submit">Send</button>
     </form>
