@@ -37,6 +37,18 @@ def get_book_from_id(book_id):
     book = cur.fetchone() # Returns a tuple (ordered group of elements) or None
     return book
 
+def get_genres_by_book(book_id):
+    cn = get_db()
+    cur = cn.cursor()
+    cur.execute("""
+        SELECT gb.genre_id, g.genre_name
+        FROM Book_Genres gb
+        INNER JOIN Genres g ON gb.genre_id = g.genre_id
+        WHERE gb.book_id = ?
+        """, (book_id,))
+    book_genre = cur.fetchall() # Cause it can have more than one genre
+    return book_genre
+
 def insert_book(book_name, author_name, genre):
     cn = get_db()
     cur = cn.cursor()

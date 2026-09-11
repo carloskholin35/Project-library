@@ -13,9 +13,13 @@
         <span id="publication_year">{{ book[4]|e }}</span>
         <span id="author-book">{{ book[2]|e }}</span>
     </div>
-    <ul>
-        <span class="genre-book"></span>
-    </ul>
+    <div id="book-genres">
+        <span>Genres</span>
+        {% for g in book_genres %}
+            <span class="genre-tag">{{ genre[1]|e }}</span>
+        {% endfor %}
+    </div>
+    
     <br><br><br>
     <form action="{{ url_for('delete_book', book_id=book[0]) }}" method="POST">
         <button type="submit">Delete book?</button>

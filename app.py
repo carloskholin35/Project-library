@@ -13,6 +13,7 @@ from database import (
     get_all_books, 
     get_all_genres, 
     get_book_from_id,
+    get_genres_by_book, 
     insert_book, 
     modify_book, 
     modify_book_genres,
@@ -48,12 +49,11 @@ def add_book():
 @app.route('/book/<int:book_id>')
 def show_book_profile(book_id):
     book = get_book_from_id(book_id)
+    book_genres = get_genres_by_book(book_id)
     genres = get_all_genres()
-    # If book doesn't exists throws error 404 (Not found)
     if book is None:
         abort(404)
-
-    return render_template('book_detail.html', book=book, genres=genres)
+    return render_template('book_detail.html', book=book, book_genres=book_genres, genres=genres)
 
 @app.route('/book/<int:book_id>/delete', methods=['POST'])
 def delete_book(book_id):
