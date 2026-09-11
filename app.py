@@ -8,6 +8,7 @@ from flask import (
     url_for, 
     abort, 
     g, 
+    flash,
 )
 from database import (
     get_all_books, 
@@ -22,6 +23,7 @@ from database import (
 
 
 app = Flask(__name__)
+app.secret_key = '12345' # Temporary key while on localhost
 
 @app.teardown_appcontext
 def teardown_app(exception):
@@ -47,6 +49,10 @@ def add_book():
     book_id, created = insert_book(book_name, author_name, cover_url, publication_year)
     modify_book_genres(book_id, genre_ids)
 
+    if created:
+        flash("Book added")
+    else:
+        flash("This book already exists")    
     return redirect(url_for('index'))
 
 @app.route('/book/<int:book_id>')

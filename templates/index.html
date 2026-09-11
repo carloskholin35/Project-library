@@ -38,5 +38,9 @@
         <br><br>
         <button type="submit">Send</button>
     </form>
+    <br><br>
+    {% for message in get_flashed_messages() %}
+        <p>{{ message }}</p>
+    {% endfor %}
 </body>
 </html>
