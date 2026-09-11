@@ -1,6 +1,24 @@
-from flask import Flask, render_template, request, redirect, url_for, abort, g
-from database import *
 import sqlite3
+
+from flask import (
+    Flask,
+    render_template, 
+    request, 
+    redirect, 
+    url_for, 
+    abort, 
+    g, 
+)
+from database import (
+    get_all_books, 
+    get_all_genres, 
+    get_book_from_id,
+    insert_book, 
+    modify_book, 
+    modify_book_genres,
+    remove_book,
+)
+
 
 app = Flask(__name__)
 
