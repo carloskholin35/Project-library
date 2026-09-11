@@ -33,9 +33,13 @@
         <input type="text" name="author_name" value="{{ book[2]|e }}" required>
         <br><br>
         <label>Genre:</label>
-        {% for genre in genres %}
-        <input type="checkbox" id="genre-{{ genre[0] }}" name="genres[]" value="{{ genre[0] }}">
-        <label for="genre-{{ genre[0] }}">{{ genre[1]|e }}</label>
+        {% [genre[0] for genre in genres] %}
+            {% if genre in book_genres %}
+                <input type="checkbox" id="genre-{{ genre[0] }}" name="genres[]" value="{{ genre[0] }}" checked>
+                <label for="genre-{{ genre[0] }}">{{ genre[1]|e }}</label>
+            {% endif %}
+            <input type="checkbox" id="genre-{{ genre[0] }}" name="genres[]" value="{{ genre[0] }}">
+            <label for="genre-{{ genre[0] }}">{{ genre[1]|e }}</label>
         {% endfor %}  
         <br><br>
         <label>Cover (URL):</label>
