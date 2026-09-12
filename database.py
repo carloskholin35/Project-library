@@ -1,9 +1,14 @@
 from flask import g
 import sqlite3
+import os
+
+# Absolute path so the DB is found regardless of the working directory
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "bookshelf.db")
 
 def get_db():
     if 'db' not in g:
-        g.db = sqlite3.connect("bookshelf.db")
+        g.db = sqlite3.connect(DB_PATH)
         g.db.execute("PRAGMA foreign_keys = ON")
     return g.db
 
