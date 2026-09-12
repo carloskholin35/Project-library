@@ -20,9 +20,12 @@ cur.execute("""
     )
 """)
 
-cur.execute("""
+try:
+    cur.execute("""
     ALTER TABLE Books DROP COLUMN genre; 
-""")
+    """)
+except sqlite3.OperationalError as e:
+    print(f"Skipped: {e}")   
 
 cn.commit()
 cur.close()
