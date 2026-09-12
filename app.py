@@ -21,7 +21,6 @@ from database import (
     remove_book,
 )
 
-
 app = Flask(__name__)
 app.secret_key = '12345' # Temporary key while on localhost
 
@@ -59,10 +58,11 @@ def add_book():
 def show_book_profile(book_id):
     book = get_book_from_id(book_id)
     book_genres = get_genres_by_book(book_id)
+    book_genres_ids = [g[0] for g in book_genres]
     genres = get_all_genres()
     if book is None:
         abort(404)
-    return render_template('book_detail.html', book=book, book_genres=book_genres, genres=genres)
+    return render_template('book_detail.html', book=book, book_genres=book_genres, book_genres_ids=book_genres_ids, genres=genres)
 
 @app.route('/book/<int:book_id>/delete', methods=['POST'])
 def delete_book(book_id):

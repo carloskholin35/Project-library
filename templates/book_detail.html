@@ -15,7 +15,7 @@
     </div>
     <div id="book-genres">
         <span>Genres</span>
-        {% for g in book_genres %}
+        {% for genre in book_genres %}
             <span class="genre-tag">{{ genre[1]|e }}</span>
         {% endfor %}
     </div>
@@ -33,14 +33,10 @@
         <input type="text" name="author_name" value="{{ book[2]|e }}" required>
         <br><br>
         <label>Genre:</label>
-        {% [genre[0] for genre in genres] %}
-            {% if genre in book_genres %}
-                <input type="checkbox" id="genre-{{ genre[0] }}" name="genres[]" value="{{ genre[0] }}" checked>
-                <label for="genre-{{ genre[0] }}">{{ genre[1]|e }}</label>
-            {% endif %}
-            <input type="checkbox" id="genre-{{ genre[0] }}" name="genres[]" value="{{ genre[0] }}">
+        {% for genre in genres %}
+            <input type="checkbox" id="genre-{{ genre[0] }}" name="genres[]" value="{{ genre[0] }}" {{ "checked" if genre[0] in book_genres_ids else "" }}>
             <label for="genre-{{ genre[0] }}">{{ genre[1]|e }}</label>
-        {% endfor %}  
+        {% endfor %}
         <br><br>
         <label>Cover (URL):</label>
         <input type="text" name="cover_url" value="{{ book[3]|e }}" required>
