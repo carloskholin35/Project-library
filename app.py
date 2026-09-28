@@ -41,8 +41,10 @@ def index():
 def add_book():
     book_name = request.form.get('book_name')
     author_name = request.form.get('author_name')
-    cover_url = request.form.get('cover_url')
-    publication_year = int(request.form.get('publication_year'))
+    # Convert to None if they have no data
+    cover_url = request.form.get('cover_url') or None
+    year = request.form.get('publication_year')
+    publication_year = int(year) if year else None
     genre_ids = [int(genre) for genre in request.form.getlist('genres[]')] #List comprehension
 
     book_id, created = insert_book(book_name, author_name, cover_url, publication_year)
@@ -80,8 +82,10 @@ def update_book(book_id):
     book_name = request.form.get('book_name')
     author_name = request.form.get('author_name')
     genre_ids = [int(genre) for genre in request.form.getlist('genres[]')] #List comprehension
-    cover_url = request.form.get('cover_url')
-    publication_year = int(request.form.get('publication_year'))
+    # Convert to None if they have no data
+    cover_url = request.form.get('cover_url') or None
+    year = request.form.get('publication_year')
+    publication_year = int(year) if year else None
 
     modify_book(book_id, book_name, author_name, cover_url, publication_year)
     modify_book_genres(book_id, genre_ids)

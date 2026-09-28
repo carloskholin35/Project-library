@@ -8,9 +8,13 @@
 </head>
 <body>
     <div id="cover">
-        <img id="cover-url" src="{{ book[3]|e }}">
+        {% if book[3] %}
+            <img id="cover-url" src="{{ book[3]|e }}">
+        {% endif %}
         <h1 id="title-book">{{ book[1]|e }}</h1>
-        <span id="publication-year">{{ book[4]|e }}</span>
+        {% if book[4] %}
+            <span id="publication-year">{{ book[4]|e }}</span>
+        {% endif %}
         <span id="author-book">{{ book[2]|e }}</span>
     </div>
     <div id="book-genres">
@@ -41,10 +45,10 @@
         {% endfor %}
         <br><br>
         <label>Cover (URL):</label>
-        <input type="text" name="cover_url" value="{{ book[3]|e }}" required>
+        <input type="text" name="cover_url" value="{{ book[3]|default('', true)|e }}">
         <br><br>
         <label>Publication year:</label>
-        <input type="text" name="publication_year" value="{{ book[4]|e }}" required>
+        <input type="text" name="publication_year" value="{{ book[4]|default('', true)|e }}">
         <br><br>
         <button type="submit">Send</button>
     </form>
