@@ -80,6 +80,8 @@ def insert_book(book_name, author_name, cover_url, publication_year):
 def remove_book(book_id):
     cn = get_db()
     cur = cn.cursor()
+    # Explicit delete from table Book_Genres, the table doesn't have CASCADE
+    cur.execute("DELETE FROM Book_Genres WHERE book_id = ?", (book_id,))
     cur.execute("DELETE FROM Books WHERE book_id = ?", (book_id,))
     cn.commit()
 

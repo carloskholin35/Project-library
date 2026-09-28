@@ -66,7 +66,13 @@ def show_book_profile(book_id):
 
 @app.route('/book/<int:book_id>/delete', methods=['POST'])
 def delete_book(book_id):
-    remove_book(book_id)
+    try:
+        remove_book(book_id)
+        flash("Book deleted")
+    except sqlite3.IntegrityError:
+        flash("This book can't be deleted because it has readings") 
+        return redirect(url_for('show_book_profile', book_id=book_id))
+    
     return redirect(url_for('index'))
 
 @app.route('/book/<int:book_id>/update', methods=['POST'])

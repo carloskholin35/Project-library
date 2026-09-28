@@ -19,7 +19,9 @@
             <span class="genre-tag">{{ genre[1]|e }}</span>
         {% endfor %}
     </div>
-    
+    {% for message in get_flashed_messages() %}
+        <p>{{ message }}</p>
+    {% endfor %}
     <br><br><br>
     <form action="{{ url_for('delete_book', book_id=book[0]) }}" method="POST">
         <button type="submit">Delete book?</button>
