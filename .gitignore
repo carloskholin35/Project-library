@@ -8,3 +8,9 @@ __pycache__/
 bookshelf.db
 *.db-journal
 diary.md
+
+# Notas personales y del IDE
+learning.md
+roadmap.md
+.idea/
+*.rar
